@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func Compress(input image.Image, speed string) (output image.Image, err error) {
+func Compress(input image.Image, args []string) (output image.Image, err error) {
 	var w bytes.Buffer
 	err = png.Encode(&w, input)
 	if err != nil {
@@ -16,7 +16,7 @@ func Compress(input image.Image, speed string) (output image.Image, err error) {
 	}
 
 	b := w.Bytes()
-	compressed, err := CompressBytes(b, speed)
+	compressed, err := CompressBytes(b, args)
 	if err != nil {
 		return
 	}
@@ -25,8 +25,9 @@ func Compress(input image.Image, speed string) (output image.Image, err error) {
 	return
 }
 
-func CompressBytes(input []byte, speed string) (output []byte, err error) {
-	cmd := exec.Command("pngquant", "-", "--speed", speed)
+func CompressBytes(input []byte, args []string) (output []byte, err error) {
+	// "-", "--speed", speed
+	cmd := exec.Command("pngquant", args ...)
 	cmd.Stdin = strings.NewReader(string(input))
 	var o bytes.Buffer
 	cmd.Stdout = &o

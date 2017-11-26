@@ -14,7 +14,12 @@ func TestCompress(t *testing.T) {
 	info, _ := file.Stat()
 	orgSize := info.Size()
 	orgImg, _ := png.Decode(file)
-	newImg, err := Compress(orgImg, "1")
+
+	args := []string{}
+	args = append(args, "-")
+	args = append(args, "--speed")
+	args = append(args, "5")
+	newImg, err := Compress(orgImg, args)
 	if err != nil {
 		t.Errorf("error has occurred: %v", err)
 	}
